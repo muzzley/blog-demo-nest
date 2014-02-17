@@ -22,9 +22,9 @@ var temperatureType = '';
 
 
 function connectMuzzley(){
-  muzzley.connectApp(options, function(err, activity) {
+  muzzley.connectApp(options, function (err, activity) {
     if (err) return console.log('err: ' + err);
-    console.log(' - Activity created id: '+activity.activityId);
+    console.log('[INFO] Created Muzzley activity with id = ' + activity.activityId);
 
     connectNest();
     // Usually you'll want to show this Activity's QR code image
@@ -32,10 +32,10 @@ function connectMuzzley(){
     // They are in the `activity.qrCodeUrl` and `activity.activityId`
     // properties respectively.
 
-    activity.on('participantJoin', function(participant) {
+    activity.on('participantJoin', function (participant) {
 
       participant.changeWidget('webview', {uuid: widgetUuid, orientation: 'portrait'}, function(err) {
-        if (err) return console.log('err: ' + err );
+        if (err) return console.log('[ERROR]', err);
 
         participant.on('quit', function() {
           console.log('quit');
@@ -50,24 +50,24 @@ function connectMuzzley(){
             nestTemperature: temperature,
             nestTemperatureType: temperatureType,
             nestHumidity: humidity,
-            nestAway:away,
-            nestId:deviceId,
+            nestAway: away,
+            nestId: deviceId,
             nestOff: off,
-            nestOnline:online
+            nestOnline: online
           }
         );
 
         // received from muzzley, when participant change Nest
-        participant.on('signalingMessage', function(type, data, callback) {
+        participant.on('signalingMessage', function (type, data, callback) {
 
           switch (type) {
               case 'nest_setTemperature':
-                console.log('set temperature to '+data.newTemperatureValue + ' ' + deviceId);
+                console.log('Temperature set to ' + data.newTemperatureValue + ' ' + deviceId);
                 var newTemp = parseInt(data.newTemperatureValue, 10);
                 setTemperature(newTemp, deviceId);
                 break;
               case 'nest_setAway':
-                console.log('set away to: '+data.value + ' ' + deviceId);
+                console.log('Away status changed to: ' + data.value + ' ' + deviceId);
                 setAway(data.value, deviceId);
                 break;
           }
@@ -84,7 +84,6 @@ function connectNest(){
       if (err) return console.log(err.message);
       nest.fetchStatus(function (data) {
         for (var ddeviceId in data.device) {
-          //console.log(data);
           // save the Nest inicial information
           deviceId = ddeviceId;
 
@@ -104,8 +103,11 @@ function connectNest(){
             off = data.device[ddeviceId].switch_system_off;
             online = data.track[ddeviceId].online;
 
-            console.log(' - Nest: '+deviceId+' temperature: '+temperature+' '+temperatureType);
-            console.log(' - Humidity: '+humidity+' away: '+away+' off: '+off+' online: '+online);
+            console.log('[INFO] Detected Nest device with id = ' + deviceId);
+            console.log('[INFO] Current profile: ' + (!away ? 'Home' : 'Away'));
+            console.log('[INFO] Current status: ' + (!off ? 'On' : 'Off') + ' and ' + (!online ? 'Offline' : 'Online'));
+            console.log('[INFO] Current temperature: ' + temperature + ' ' + temperatureType);
+            console.log('[INFO] Current humidity: ' + humidity + '%');
           }
           if(online){
             // when find one Nest online, return. In this example only want one Nest device
