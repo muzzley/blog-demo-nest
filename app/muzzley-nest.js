@@ -1,8 +1,10 @@
 var nest = require('unofficial-nest-api');
 var muzzley = require('muzzley-client');
+var config = require('./config');
 
-var username = process.env.NEST_USERNAME || 'yourNestUser@example.com';
-var password = process.env.NEST_PASSWORD || 'yourNestPass';
+var username = config.username;
+var password = config.password;
+
 var widgetUuid='8137001c-2711-4af3-a799-45003b6359aa';
 var options = {
   token: '0f0fe92e15316d4b',
@@ -154,3 +156,5 @@ function setAway(value, deviceId){
   }
   away = value;
 }
+
+connectMuzzley();
