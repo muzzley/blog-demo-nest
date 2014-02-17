@@ -21,7 +21,7 @@ Rig.prototype.init = function (callback) {
     return callback();
   }
 
-  nest.login(config.username, config.password, function (err) {
+  nest.login(config.nest.username, config.nest.password, function (err) {
     if (err) return callback(err);
     nest.fetchStatus(mapDevices);
   });
@@ -29,24 +29,29 @@ Rig.prototype.init = function (callback) {
 
 Rig.prototype.setTemperature = function (temperature) {
   for (var i = 0, len = this.units.length; i < len; i++) {
-    unit.setTemperature(temperature);
+    this.units[i].setTemperature(temperature);
+    nest.setTemperature(this.units[i].getId(), temperature);
   }
 };
 
 Rig.prototype.getTemperature = function () {
-  var i = 0, len = this.units.length, total = 0, scale;
-
-  if (len === 0) {
-    return null;
-  } else {
-    scale = this.units[0].getScale();
-  }
+  var i = 0, len = this.units.length, total = 0;
 
   for (i = 0; i < len; i++) {
     total += this.units[i].getTemperature();
   }
 
-  return [Math.floor(total / len), scale].join(' ');
+  return Math.floor(total / len);
+};
+
+Rig.prototype.getScale = function () {
+  var len = this.units.length;
+
+  if (len === 0) {
+    return null;
+  }
+
+  return this.units[0].getScale();
 };
 
 Rig.prototype.getUnits = function () {
