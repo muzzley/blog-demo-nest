@@ -1,8 +1,8 @@
 var nest = require('unofficial-nest-api');
 var muzzley = require('muzzley-client');
 
-var username = 'yourNestUser@example.com';
-var password = 'yourNestPass';
+var username = process.env.NEST_USERNAME || 'yourNestUser@example.com';
+var password = process.env.NEST_PASSWORD || 'yourNestPass';
 var widgetUuid='8137001c-2711-4af3-a799-45003b6359aa';
 var options = {
   token: '0f0fe92e15316d4b',
@@ -23,7 +23,7 @@ function connectMuzzley(){
   muzzley.connectApp(options, function(err, activity) {
     if (err) return console.log('err: ' + err);
     console.log(' - Activity created id: '+activity.activityId);
-    
+
     connectNest();
     // Usually you'll want to show this Activity's QR code image
     // or its id so that muzzley users can join.
@@ -41,7 +41,7 @@ function connectMuzzley(){
 
         var state = 0;
         var id = '';
-        
+
         // send to muzzley the object with Nest inicial information
         participant.sendSignal('nest_status',
           {
@@ -55,9 +55,9 @@ function connectMuzzley(){
           }
         );
 
-        // received from muzzley, when participant change Nest 
+        // received from muzzley, when participant change Nest
         participant.on('signalingMessage', function(type, data, callback) {
-         
+
           switch (type) {
               case 'nest_setTemperature':
                 console.log('set temperature to '+data.newTemperatureValue + ' ' + deviceId);
@@ -85,12 +85,12 @@ function connectNest(){
           //console.log(data);
           // save the Nest inicial information
           deviceId = ddeviceId;
-          
+
           if (data.device.hasOwnProperty(ddeviceId)) {
             var device = data.shared[ddeviceId];
             temperatureType = data.device[ddeviceId].temperature_scale;
             temperature = data.shared[ddeviceId].target_temperature;
-            //the target temperature value is always in Celsius, convert to Fahrenheit if the temperature scale was in Fahrenheit 
+            //the target temperature value is always in Celsius, convert to Fahrenheit if the temperature scale was in Fahrenheit
             if(temperatureType === 'F'){
               temperature = nest.ctof(temperature);
             }
@@ -101,7 +101,7 @@ function connectNest(){
             away = data.structure[someid].away;
             off = data.device[ddeviceId].switch_system_off;
             online = data.track[ddeviceId].online;
-            
+
             console.log(' - Nest: '+deviceId+' temperature: '+temperature+' '+temperatureType);
             console.log(' - Humidity: '+humidity+' away: '+away+' off: '+off+' online: '+online);
           }
@@ -109,7 +109,7 @@ function connectNest(){
             // when find one Nest online, return. In this example only want one Nest device
             return;
           }
-          
+
         }
       });
   });
