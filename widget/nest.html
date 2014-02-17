@@ -1,0 +1,46 @@
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<script language='javascript' type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+ 
+<div id="lightbox-img-nest" class="lightbox-img">
+    <div class="back"><i class="fa fa-times"></i></div>
+    <div class="rows object-name">NEST THERMOSTAT</div>
+    <div class="rows object-id">ID:</div>
+    <div class="rows" style="text-align:center">
+        <span class="status">Status:<span>Off</span></span>
+        <span id="network">&nbsp;&nbsp;&nbsp;&nbsp;Network:<span>Online</span></span>
+    </div>
+    <div class="rows" style="text-align:center">
+        <input type="radio" id="away_value"> Away&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="home_value"> Home
+    </div>
+    <div class="rows" id="humValue">Humidiy: <span style="color:#ED1C24"></span></div>
+    <div class="rows" id="tempRow">
+        <div class="col-xs-4" id="tempLeft">
+            <i class="fa fa-chevron-left"></i>
+        </div>
+        <div class="col-xs-4" id="tempValue">
+            <span></span>
+        </div>    
+        <div class="col-xs-4" id="tempRight">
+            <i class="fa fa-chevron-right"></i>
+        </div>   
+    </div>
+</div>    
+<div id="lightbox-img-belkin" class="lightbox-img">
+    <div class="back"><i class="fa fa-times"></i></div>
+    <div class="rows object-name">BELKIN WeMo</div>
+    <div class="rows object-id">ID:</div>
+    <div class="rows" style="text-align:center">
+        <span class="status">Status:<span>Off</span></span>
+    </div>
+    <div id="switch-icon" style="margin-top:20px"></div>
+</div>    
+<div id="home-view" class="view">
+    <div id="btn1" class="col-xs-3"><div id="lampImg"></div></div>
+    <div id="btn2" class="col-xs-6"></div>
+    <div id="btn3" class="col-xs-3"><div id="NestImg"><div id="tempV"></div></div></div>
+</div>
+
