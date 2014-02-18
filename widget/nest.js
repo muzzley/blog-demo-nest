@@ -22,6 +22,10 @@ function updateTemperatureOnWidget(temperature) {
   $('#temperature-input').val(temperature);
 }
 
+function setCurrentTemperatureScale(scale) {
+  $('.scale').text(scale);
+}
+
 function updateTemperatureOnThermostat(temperature) {
   muzzley.send(window.NEST_DEMO.MUZZLEY_PROPERTIES.OUTBOUND_SIGNAL, { newTemperatureValue: temperature });
 }
@@ -36,6 +40,7 @@ function manageDeviceEvents() {
 function manageThermostatEvents() {
   muzzley.on(window.NEST_DEMO.MUZZLEY_PROPERTIES.INBOUND_SIGNAL, function (data) {
     updateTemperatureOnWidget(data.nestTemperature);
+    setCurrentTemperatureScale(data.nestTemperatureType);
   });
 }
 
