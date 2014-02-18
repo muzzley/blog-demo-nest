@@ -18,23 +18,26 @@ function addSelectFieldOptions(elem) {
   }
 }
 
-function updateTemperatureOnThermostat(temperature) {
-  console.log('[INFO] updated temperature on thermostat to ', temperature);
+function updateTemperatureOnWidget(temperature) {
+  console.log('[DEBUG] updating temperature on widget to ', temperature);
   $('#temperature-input').val(temperature);
 }
 
-function updateTemperatureOnDevice(temperature) {
-  console.log('[INFO] updated temperature on device to ', temperature);
+function updateTemperatureOnThermostat(temperature) {
+  console.log('[DEBUG] updated temperature on thermostat to ', temperature);
   muzzley.send(window.NEST_DEMO.MUZZLEY_PROPERTIES.OUTBOUND_SIGNAL, { newTemperatureValue: temperature });
 }
 
 function manageDeviceEvents() {
-  $('#temperature-input').on('change', updateTemperatureOnThermostat);
+  $('#temperature-input').on('change', function () {
+    var currentTemperature = $(this).val();
+    updateTemperatureOnThermostat(currentTemperature);
+  });
 }
 
 function manageThermostatEvents() {
   muzzley.on(window.NEST_DEMO.MUZZLEY_PROPERTIES.INBOUND_SIGNAL, function (data) {
-    updateTemperatureOnThermostat(data.nestTemperature);
+    updateTemperatureOnWidget(data.nestTemperature);
   });
 }
 
