@@ -1,65 +1,73 @@
-#Nest Interface
+# Nest Interface
+This is a sample Muzzley integration showcasing how you can control the temperature of your Nest thermostat via a smartphone, and most importantly, with an open source setup.
 
-The Nest Interface allows you to control the Nest device with a custom interface.
+## Getting Started
+If you want to follow along, and you probably should, otherwise, you would not be here, the first and only thing you need to do (besides installing [Node.js](//nodejs.org/) if you have not yet) is to download the source code or clone this repo. Of course, you will need to have a Nest device and account credentials to test the app against.
 
-<br>
-To integrate with Nest there are no official api, but on github exists a unofficial api in node: [unofficial-nodejs-nest](https://github.com/wiredprairie/unofficial_nodejs_nest). 
-Next you have to install and configure the Nest. In my case there was no possibility of doing the installation with the thermostat, but I could see the changes in the Nest display. Turn on your Nest and configure the settings, location, wi-fi, etc. Go to [home.nest.com](https://home.nest.com/) to configure your account and set on account settings of your Nest.
-<br>After the Nest online and logged in, you are ready to clone the code of this project. 
+## Running the app
+To tun the app, open the `config.js` file in the `app` folder and replace the dummy content in the `username` and `password` string fields with your account credentials.
 
-### WIDGET 
+```javascript
+module.exports = {
+  nest: {
+    username: process.env.NEST_USERNAME || 'yourNestUsername',
+    password: process.env.NEST_PASSWORD || 'yourNestPassword'
+  },
+  ...
+};
+```
 
-Use the files of widget folder to create your own widget on [muzzley site](http://www.muzzley.com/)
-<br>Pay attention on the muzzley events on the Javascript file. These events will receive and send messages to muzzley.
+## How does it work?
+As of today, there is no official Nest API but there are some libraries out there that provide access to its basic features such as [unofficial-nodejs-nest](https://www.npmjs.org/package/unofficial-nest-api), which is the one used by the app. The communication protocol with your Smartphone is established via the muzzley platform using the official Node.js [library](http://www.muzzley.com/documentation/libraries/nodejs.html). The integration boils down to the following flow:
 
+### Widget
+```javascript
+// Display temperature updates on the widget
+muzzley.on('nest_status', function (data, callback) {
+  // update the UI using the data.nestTemperature property received
+});
 
-<pre><code>
-	// loads initial values from Nest and Belkin
-	muzzley.on('nest_status', function(data, callback){
-		// data.nestTemperatureType	
-		// data.nestTemperature
-		// data.nestHumidity	
-		// data.nestOnline	
-		// data.nestAway	
-		// data.nestOff	
-		// data.nestId	
-	});
-	
-	// change the temperature value to 20
-	muzzley.send("nest_setTemperature", {newTemperatureValue: 20} );
-	
-	// change the away status to true
-	muzzley.send("nest_setAway", {value: true} );
+// Change the thermostat temperature with the value inserted using the widget.
+muzzley.send("nest_setTemperature", { newTemperatureValue: 20 } );
+```
 
-</code></pre>
+### Node App
+```javascript
+muzzley.connectApp({ /* properties */ }, function (err, activity) {
+  activity.on('participantJoin', function (participant) {
+    participant.on('signalingMessage', function (type, data) {
+      // Set data.newTemperatureValue as the device temperature using the unofficial-nodejs-nest API
+    });
+    ...
+    // Send the current device temperature to the widget.
+    participant.sendSignal('nest_status', { nestTemperature: 20 });
+  });
+});
+```
 
-The widget shows the Nest info and allows you to change the temperature of the Nest, and the away status.
+## Next Steps
+You can leverage this kind of integration to do a lot more stuff, not only specific to the Nest device (set home/away profiles, check humidity levels, etc.) but also with any kind of connected device that provides some kind of API or communication protocol. The widget is also fully customizable, so, if you want, you can create your own widgets on our [website](//www.muzzley.com) and use them instead. It's really easy to setup, you just need to change the `uuid` field in the `config.js` file:
 
+```javascript
+  muzzley: {
+    ...
+    widget: {
+      ...
+      properties: {
+        uuid: process.env.MUZZLEY_NEST_WIDGET_ID || 'yourWidgetUUID',
+        ...
+      }
+    }
+  }
+```
 
-###APLICATION
+You can also create your own app and the corresponding static activity Id, but you won't need to do that as far as this example goes.
 
-Go to muzzley-nest.js and change the `username` and `password` variables to you Nest account data.
-The `widgetUuid`, `token` and `activityId` variables are filled with real data from [muzzley site](http://www.muzzley.com/), so you can immediately test the demo.
+<br />
 
-Installing packages:
+> Nest API credits to [unofficial-nodejs-nest](//github.com/wiredprairie/unofficial_nodejs_nest)
 
-<pre><code>npm install</code></pre>
+<br />
 
-On your shell:
-
-<pre><code>node muzzley-nest.js</code></pre>
- 
-
-
-If all goes well Belkin and Nest devices is detected and the muzzley activity is created. 
-Use your muzzley application and insert the activity id to connect and view the interface.
-
-<br><br>
-
-
-> Nest api credits to project ([ unofficial-nodejs-nest](https://github.com/wiredprairie/unofficial_nodejs_nest))
-
-
-<br>
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/taniarocha/muzzley-nest/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/taniarocha/muzzley-nest/trend.png)](https://bitdeli.com/free" Bitdeli Badge")
 
