@@ -1,7 +1,7 @@
 window.NEST_DEMO = window.NEST_DEMO || {};
 window.NEST_DEMO.DEVICE_PROPERTIES = window.NEST_DEMO.DEVICE_PROPERTIES || {
   TEMPERATURE: {
-    MIN: 9,
+    MIN: 10,
     MAX: 32
   }
 };
