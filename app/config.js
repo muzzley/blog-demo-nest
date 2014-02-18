@@ -4,13 +4,13 @@ module.exports = {
     password: process.env.NEST_PASSWORD || 'yourNestPassword'
   },
   muzzley: {
-    token: '0f0fe92e15316d4b',
-    activity: '948035',
+    token: process.env.MUZZLEY_APP_TOKEN || '0f0fe92e15316d4b',
+    activity: process.env.MUZZLEY_ACTIVITY_ID || '948035',
     widget: {
-      type: 'webview',
+      type: process.env.MUZZLEY_NEST_WIDGET_TYPE || 'webview',
       properties: {
-        uuid: '8137001c-2711-4af3-a799-45003b6359aa',
-        orientation: 'portrait'
+        uuid: process.env.MUZZLEY_NEST_WIDGET_ID || 'aef671a3-2a24-4b5f-8934-be763451df49',
+        orientation: process.env.MUZZLEY_NEST_WIDGET_ORIENTATION || 'portrait'
       }
     }
   }

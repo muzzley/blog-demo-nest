@@ -1,8 +1,3 @@
-var PROFILES = {
-  HOME: 'Home',
-  AWAY: 'Away'
-};
-
 function Thermostat() {
   this.id = null;
   this.temperature = null;
