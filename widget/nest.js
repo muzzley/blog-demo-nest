@@ -19,12 +19,10 @@ function addSelectFieldOptions(elem) {
 }
 
 function updateTemperatureOnWidget(temperature) {
-  console.log('[DEBUG] updating temperature on widget to ', temperature);
   $('#temperature-input').val(temperature);
 }
 
 function updateTemperatureOnThermostat(temperature) {
-  console.log('[DEBUG] updated temperature on thermostat to ', temperature);
   muzzley.send(window.NEST_DEMO.MUZZLEY_PROPERTIES.OUTBOUND_SIGNAL, { newTemperatureValue: temperature });
 }
 
