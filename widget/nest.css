@@ -16,11 +16,9 @@
   -moz-appearance: none;
   background-color: #ED1C24;
   border-radius: 50%;
+  border-width: 0;
   color: #FFF;
   font-size: 2.5em;
-  height: inherit;
-  line-height: 2.5em;
+  padding: 0.5em;
   text-align: center;
-  text-indent: 0.5em;
-  width: 2.5em;
 }
